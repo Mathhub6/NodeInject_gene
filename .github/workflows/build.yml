@@ -23,11 +23,11 @@ jobs:
 
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
       with:
         repository: Mathhub6/NodeInject_gene
     - name: Checkout repository 
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
       with:
           path: './js'
     - name: Install Rust
