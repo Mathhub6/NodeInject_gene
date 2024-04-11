@@ -16,18 +16,18 @@ jobs:
           archive-name: NodeInject-linux.tar.gz
         - build: windows
           os: windows-latest
-          rust: stable-x86_64-msvc
-          target: x86_64-pc-windows-msvc
+          rust: stable-x86_64-gnu
+          target: x86_64-pc-windows-gnu
           archive-name: NodeInject-windows.7z
       fail-fast: false
 
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v4
+      uses: actions/checkout@v3
       with:
         repository: Mathhub6/NodeInject_gene
     - name: Checkout repository 
-      uses: actions/checkout@v4
+      uses: actions/checkout@v3
       with:
           path: './js'
     - name: Install Rust
