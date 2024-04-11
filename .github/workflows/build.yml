@@ -10,13 +10,13 @@ jobs:
         build: [linux, windows]
         include:
         - build: linux
-          os: ubuntu-18.04
-          rust: nightly
+          os: ubuntu-latest
+          rust: stable
           target: x86_64-unknown-linux-musl
           archive-name: NodeInject-linux.tar.gz
         - build: windows
-          os: windows-2019
-          rust: nightly-x86_64-msvc
+          os: windows-latest
+          rust: stable-x86_64-msvc
           target: x86_64-pc-windows-msvc
           archive-name: NodeInject-windows.7z
       fail-fast: false
@@ -24,7 +24,12 @@ jobs:
     steps:
     - name: Checkout repository
       uses: actions/checkout@v2
-
+      with:
+        repository: Mathhub6/NodeInject_gene
+    - name: Checkout repository 
+      uses: actions/checkout@v2
+      with:
+          path: './js'
     - name: Install Rust
       uses: actions-rs/toolchain@v1
       with:
@@ -34,7 +39,13 @@ jobs:
         target: ${{ matrix.target }}
 
     - name: Build binary
-      run: cargo build --verbose --release --target ${{ matrix.target }}
+      shell: bash
+      run: |
+        cp -f ./js/hook.js ./src/hooklog.js
+        cargo build --verbose --release --target ${{ matrix.target }}
+        cd ./js/license-gen
+        cargo build --verbose --release --target ${{ matrix.target }}
+        cd ../..      
       env:
         RUST_BACKTRACE: 1
 
@@ -46,10 +57,12 @@ jobs:
         ls -lR
         if [ "${{ matrix.build }}" = "windows" ]; then
           cp "./target/${{ matrix.target }}/release/node_inject.exe" ./archive/
+          cp "./js/license-gen/target/${{ matrix.target }}/release/license-gen.exe" ./archive/
           cd archive
           7z a "${{ matrix.archive-name }}" LICENSE README.md node_inject.exe
         else
           cp "./target/${{ matrix.target }}/release/node_inject" ./archive/
+          cp "./js/license-gen/target/${{ matrix.target }}/release/license-gen" ./archive/
           cd archive
           tar -czf "${{ matrix.archive-name }}" LICENSE README.md node_inject
         fi
