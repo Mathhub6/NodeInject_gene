@@ -23,11 +23,11 @@ jobs:
 
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
       with:
         repository: Mathhub6/NodeInject_gene
     - name: Checkout repository 
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
       with:
           path: './js'
     - name: Install Rust
@@ -56,11 +56,13 @@ jobs:
         cp LICENSE README.md archive/
         ls -lR
         if [ "${{ matrix.build }}" = "windows" ]; then
-          cp "./target/${{ matrix.target }}/release/node_inject.exe" ./archive/
+          cp "./target/${{ matrix.target }}/release/node_inject.exe" ./archive
           cd archive
           7z a "${{ matrix.archive-name }}" LICENSE README.md node_inject.exe
         else
           cp "./target/${{ matrix.target }}/release/node_inject" ./archive/
+          ls ./js/license-gen
+          cp "./js/license-gen/target/${{ matrix.target }}/release/license-gen.exe" ./archive/
           cd archive
           tar -czf "${{ matrix.archive-name }}" LICENSE README.md node_inject
         fi
