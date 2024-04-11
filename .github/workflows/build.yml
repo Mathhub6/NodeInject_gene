@@ -57,12 +57,10 @@ jobs:
         ls -lR
         if [ "${{ matrix.build }}" = "windows" ]; then
           cp "./target/${{ matrix.target }}/release/node_inject.exe" ./archive/
-          cp "./js/license-gen/target/${{ matrix.target }}/release/license-gen.exe" ./archive/
           cd archive
           7z a "${{ matrix.archive-name }}" LICENSE README.md node_inject.exe
         else
           cp "./target/${{ matrix.target }}/release/node_inject" ./archive/
-          cp "./js/license-gen/target/${{ matrix.target }}/release/license-gen" ./archive/
           cd archive
           tar -czf "${{ matrix.archive-name }}" LICENSE README.md node_inject
         fi
