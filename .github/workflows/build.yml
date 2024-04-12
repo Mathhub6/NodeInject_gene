@@ -8,7 +8,7 @@ jobs:
   build:
     name: build
     runs-on: ${{ matrix.os }}
-    strategy:
+        strategy:
       matrix:
         build: [linux, windows]
         include:
@@ -19,8 +19,8 @@ jobs:
           archive-name: NodeInject-linux.tar.gz
         - build: windows
           os: windows-latest
-          rust: stable-x86_64-gnu
-          target: x86_64-pc-windows-gnu
+          rust: stable-x86_64-msvc
+          target: x86_64-pc-windows-msvc
           archive-name: NodeInject-windows.7z
       fail-fast: false
     steps:
@@ -46,9 +46,9 @@ jobs:
         shell: bash
         run: |
           cp -f ./js/hook.js ./src/hooklog.js
-          cargo build --verbose -r
+          cargo build --verbose -r --target ${{ matrix.target }}
           cd ./js/license-gen/
-          cargo build --verbose -r
+          cargo build --verbose -r --target ${{ matrix.target }}
           cd ../.. 
         env:
           RUST_BACKTRACE: 1
